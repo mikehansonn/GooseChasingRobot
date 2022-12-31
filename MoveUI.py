@@ -1,7 +1,6 @@
 import tkinter as tk
-import Cytronclass64
+import RPi.GPIO as GPIO
 
-cytron = Cytronclass64.Cytronclass()
 check = False
 window = tk.Tk()
 label = tk.Label(text="Robot Controller")
@@ -15,55 +14,103 @@ label.pack()
 label1.pack()
 label2.pack()
 
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+AN2 = 13
+AN1 = 12
+DIG2 = 24
+DIG1 = 26
+GPIO.setup(AN2, GPIO.OUT)
+GPIO.setup(AN1, GPIO.OUT)
+GPIO.setup(DIG2, GPIO.OUT)
+GPIO.setup(DIG1, GPIO.OUT)
+p1 = GPIO.PWM(AN1, 100)
+p2 = GPIO.PWM(AN2, 100)
 
-def forward(cytron1, flag):
-    cytron1.ramp_up(20, .01)
+
+def forward():
+    global GPIO
+    global p1
+    global p2
+
+    GPIO.output(DIG1, GPIO.LOW)
+    GPIO.output(DIG2, GPIO.LOW)
+    p1.start(20)
+    p2.start(20)
     print("forward function")
 
 
-def backwards(cytron1):
-    cytron1.ramp_up(-20, .01)
+def backwards():
+    global GPIO
+    global p1
+    global p2
+
+    GPIO.output(DIG1, GPIO.HIGH)
+    GPIO.output(DIG2, GPIO.HIGH)
+    p1.start(20)
+    p2.start(20)
     print("backwards function")
 
 
-def left(cytron1):
+def left():
+    global GPIO
+    global p1
+    global p2
+
+    GPIO.output(DIG1, GPIO.LOW)
+    GPIO.output(DIG2, GPIO.HIGH)
+    p1.start(20)
+    p2.start(20)
     print("spin left function")
 
 
-def right(cytron1):
+def right():
+    global GPIO
+    global p1
+    global p2
+
+    GPIO.output(DIG1, GPIO.HIGH)
+    GPIO.output(DIG2, GPIO.LOW)
+    p1.start(20)
+    p2.start(20)
     print("spin right function")
 
 
-def stop(event, cytron1):
+def stop(event):
     global check
+    global GPIO
+    global p1
+    global p2
     if check:
-        cytron1.recursiveStopMotors()
-        print("stop")
+        GPIO.output(DIG1, GPIO.LOW)
+        GPIO.output(DIG2, GPIO.LOW)
+        p1.start(0)
+        p2.start(0)
         check = False
 
 
-def handle_keypress(event, cytron2):
+def handle_keypress(event):
     global check
     if event.char == 'w':  # forwards
         if not check:
-            forward(cytron2)
+            forward()
             check = True
     elif event.char == 's':  # backwards
         if not check:
-            backwards(cytron2)
+            backwards()
             check = True
     elif event.char == 'a':  # left
         if not check:
-            left(cytron2)
+            left()
             check = True
     elif event.char == 'd':  # right
         if not check:
-            right(cytron2)
+            right()
             check = True
 
 
 # Bind keypress event to handle_keypress()
-window.bind("<Key>", lambda event, arg=cytron: handle_keypress(event, cytron))
-window.bind('<KeyRelease>', lambda event, arg=cytron: stop(event, cytron))
+window.bind("<Key>", handle_keypress)
+window.bind('<KeyRelease>', stop)
 
 window.mainloop()
