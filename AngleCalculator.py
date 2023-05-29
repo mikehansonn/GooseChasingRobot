@@ -2,11 +2,11 @@
 
 import math
 
-fromX = 41.6253675
-fromY = 73.78445971
+fromX = 0
+fromY = 0
 
-toX = 41.6253787075
-toY = 73.784457625
+toX = 1
+toY = 2
 
 slope = math.atan2((toY - fromY), (toX - fromX))
 
