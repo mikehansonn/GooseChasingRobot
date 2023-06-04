@@ -23,6 +23,8 @@ class p2p:
 
         if self.desired_angle < 0:
             self.desired_angle = self.desired_angle + 360
+            
+        self.desired_angle = 360 - self.desired_angle
 
 
     def find_correct_angle_direction(self):
@@ -60,8 +62,7 @@ class p2p:
 
     def calculate_distance_two_angles(self):
         list_compass = self.sensor_compass.get_bearing()
-        diff = abs(self.desired_angle - list_compass[0])
-    
+        diff = abs(self.desired_angle - list_compass[0] - 12.9)
         # Handle the wraparound case
         if diff > 180:
             diff = 360 - diff
@@ -69,43 +70,55 @@ class p2p:
         return diff
     
 
-    def go_to_next_point(self):
+    def turn_to_angle(self):
         self.find_new_angle()
         self.find_correct_angle_direction()
-        
-        while self.calculate_distance_two_angles() > 3:
-            if self.calculate_distance_two_angles() > 50:
+
+        while self.calculate_distance_two_angles() > 10:
+            self.find_correct_angle_direction()
+            if self.calculate_distance_two_angles() > 75:
                 if self.increment_or_decrement == 1:
-                    self.bot.left_turn(100)
+                    self.bot.left_turn(90)
                 else:
-                    self.bot.right_turn(100)
-            elif self.calculate_distance_two_angles() > 30:
+                    self.bot.right_turn(90)
+            elif self.calculate_distance_two_angles() > 50:
                 if self.increment_or_decrement == 1:
-                    self.bot.left_turn(50)
+                    self.bot.left_turn(70)
                 else:
-                    self.bot.right_turn(50)
-            elif self.calculate_distance_two_angles() > 10:
-                if self.increment_or_decrement == 1:
-                    self.bot.left_turn(30)
-                else:
-                    self.bot.right_turn(30)
+                    self.bot.right_turn(70)
         
         self.bot.stop()
 
-        while self.calculate_distance_two_points() > .5:
+
+    def adjust_when_moving(self, value):
+        self.find_new_angle()
+        self.find_correct_angle_direction()
+        difference_value = self.calculate_distance_two_angles()
+        if self.increment_or_decrement == 1:
+            left_motor = value
+            right_motor = value - (difference_value * 2)
+        else:
+            left_motor = value - (difference_value * 2)
+            right_motor = value
+
+        return left_motor, right_motor
+
+
+    def go_to_next_point(self):
+        self.turn_to_angle()
+
+        while self.calculate_distance_two_points() > .25:
+            self.find_new_angle()
             if self.calculate_distance_two_points() > 3:
-                self.bot.forward(100, 100)
-            elif self.calculate_distance_two_points() > 2:
-                self.bot.forward(75, 75)
-            elif self.calculate_distance_two_points() > 1:
-                self.bot.forward(50, 50)
+                list = self.adjust_when_moving(100)
+            else:
+                list = self.adjust_when_moving(80)
+
+                
+            self.bot.forward(list[0], list[1])
+        
+        self.bot.stop()
 
 
-
-
-
-to_coordinate_x = 41.62548604
-to_coordinate_y = 73.78442733
-
-point = p2p(to_coordinate_x,to_coordinate_y)
+point = p2p(41.625455, 73.78449066)
 point.go_to_next_point()
