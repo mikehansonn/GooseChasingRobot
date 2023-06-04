@@ -1,83 +1,67 @@
 import tkinter as tk
 import csv
+import point_to_point
+import Cytronclass85c
 
 current_position = 0
-current_x = 0
-current_y = 0
+
+def move_new_point(lat, long):
+    p2p2p = Cytronclass85c.Cytronclass()
+    list = p2p2p.read_gps_correction_file("predator GPS correction file 2023-04-10.csv")
+    p2p2p.navigate_point2point(lat, long, list[0])
 
 
 def button_pressed(check_list, i):
     global current_position
-    global current_x
-    global current_y
 
     if i == current_position:
         print("you are already here")
     else:
         if float(check_list[i][3][current_position]) == 1:
             current_position = i
-            # add movement code and update x and y
+            move_new_point(check_list[i][1], check_list[i][2])
         else:
             if current_position < 12 <= i:
-                # movement code to 8
+                move_new_point(check_list[8][1], check_list[8][2])
                 current_position = 8
                 if i >= 15:
-                    # movement code to 14
+                    move_new_point(check_list[14][1], check_list[14][2])
                     current_position = 14
                     if float(check_list[i][3][current_position]) == 1:
-                        # add movement code and update x and y
+                        move_new_point(check_list[i][1], check_list[i][2])
                         current_position = i
                 else:
                     if float(check_list[i][3][current_position]) == 1:
-                        # add movement code and update x and y
+                        move_new_point(check_list[i][1], check_list[i][2])
                         current_position = i
             elif current_position < 14 < i:
-                # movement code to 14
+                move_new_point(check_list[14][1], check_list[14][2])
                 current_position = 14
                 if float(check_list[i][3][current_position]) == 1:
-                    # add movement code and update x and y
+                    move_new_point(check_list[i][1], check_list[i][2])
                     current_position = i
             elif current_position > 11 >= i:
                 if current_position > 14:
-                    # movement code to 14
+                    move_new_point(check_list[14][1], check_list[14][2])
                     current_position = 14
-                    # movement code to 8
+                    move_new_point(check_list[8][1], check_list[8][2])
                     current_position = 8
                     if float(check_list[i][3][current_position]) == 1:
-                        # add movement code and update x and y
+                        move_new_point(check_list[i][1], check_list[i][2])
                         current_position = i
                 elif current_position > 11:
-                    # movement code to 8
+                    move_new_point(check_list[8][1], check_list[8][2])
                     current_position = 8
                     if float(check_list[i][3][current_position]) == 1:
-                        # add movement code and update x and y
+                        move_new_point(check_list[i][1], check_list[i][2])
                         current_position = i
             elif current_position > 14 > i:
-                # movement code to 14
+                move_new_point(check_list[14][1], check_list[14][2])
                 current_position = 14
                 if float(check_list[i][3][current_position]) == 1:
-                    # add movement code and update x and y
+                    move_new_point(check_list[i][1], check_list[i][2])
                     current_position = i
-    print(current_position)
 
-# Keys
-#  0: 01111111111111100
-#  1: 10111111111100000
-#  2: 11011111111100000
-#  3: 11101111111100000
-#  4: 11110111111111100
-#  5: 11111011111100000
-#  6: 11111101111100000
-#  7: 11111110111100000
-#  8: 11111111011111100
-#  9: 11111111101100000
-# 10: 11111111110100000
-# 11: 11111111111000000
-# 12: 10001000100001100
-# 13: 10001000100010100
-# 14: 10001000100011011
-# 15: 00000000000000101
-# 16: 00000000000000110
 
 def main():
     tuple_list = []
