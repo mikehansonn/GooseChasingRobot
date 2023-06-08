@@ -103,50 +103,41 @@ class rel:
         p2p2p.navigate_point2point(lat, long, list[0])
 
 
-    def get_legal_moves(self, at):
-        moves = []
-        for i in range(len(self.tuple_list)):
-            if self.tuple_list[at][3][i] == "1":
-                moves.append(i)
-        
-        return moves
+    def calculate_distance(self, i):
+        current = self.current_position
+        list = [] # [[distance, at, [route]], ...]
 
+        for j in range(len(self.tuple_list)):
+            if self.tuple_list[current][3][j] == "1":
+                distance = self.calculate_two_given_points(self.tuple_list[current][1], self.tuple_list[current][2], self.tuple_list[j][1], self.tuple_list[j][2])
+                sample = [distance, j, [j]]
+                list.append(sample)
+        for l in range(3):
+            for j in range(len(list)):
+                if list[j][2][len(list[j][2]) - 1] != i:
+                    for k in range(len(self.tuple_list)):
+                        if self.tuple_list[list[j][1]][3][k] == "1":
+                            distance = self.calculate_two_given_points(self.tuple_list[list[j][1]][1], self.tuple_list[list[j][1]][2], self.tuple_list[k][1], self.tuple_list[k][2])
+                            new_sample = [list[j][0] + distance, k, list[j][2].append(k)]
 
-    def calculate_distance(self, at, want, total_distance, route):
-        legal = self.get_legal_moves(at)
-
-        if len(route) > 7:
-            return 10000000, []
-
-        for m in range(len(legal)):
-            total_distance += self.calculate_two_given_points(self.tuple_list[legal[m]][1], self.tuple_list[legal[m]][2], self.tuple_list[at][1], self.tuple_list[at][2])
-            at = legal[m]
-            route.append(legal[m])
-            
-            if legal[m] == want:
-                return total_distance, route
-            else:
-                return self.calculate_distance(at, want, total_distance, route)
-                
+        return list
 
 
     def button_pressed(self, i):
-        to_index = -1
         small_distance = 100000000
+        go_to = []
 
         if self.tuple_list[self.current_position][3][i] == "1":
             self.move_new_point(self.tuple_list[i][1], self.tuple_list[i][2])
         else:
-            for j in range(len(self.tuple_list)):
-                if self.tuple_list[self.current_position][3][j] == "1":
-                    distance = self.calculate_two_given_points(self.tuple_list[self.current_position][1], self.tuple_list[i][2], self.tuple_list[self.current_position][1], self.tuple_list[j][2])
-                    list = self.calculate_distance(self.current_position, i, distance, [j])
-                    if list[0] < small_distance:
-                        to_index = list[1]
-                        small_distance = list[0]
+            list = self.calculate_distance(i)
+            for j in range(len(list)):
+                if list[j][0] < small_distance and list[j][2][len(list) - 1] == i:
+                    go_to = list[j][2]
+                    small_distance = list[j][0]
 
-            for q in range(len(to_index)):
-                self.move_new_point(self.tuple_list[to_index[q]][1], self.tuple_list[to_index[q]][2])
+            for q in range(len(go_to)):
+                self.move_new_point(self.tuple_list[go_to[q]][1], self.tuple_list[go_to[q]][2])
 
 
 def __main__():
