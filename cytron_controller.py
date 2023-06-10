@@ -1,4 +1,5 @@
 import tkinter as tk
+import SparkfungpsClass41
 import RPi.GPIO as GPIO
 
 def tank_settings():
@@ -103,6 +104,13 @@ def update_differential(value):
     differential = float(int(value)/100)
 
 
+def plot_point():
+    gps = SparkfungpsClass41.Gpsclass()
+    list = gps.read_gps_broadcast()
+
+    print(''.join([str(list[0]), ",", str(list[1])]))
+
+
 differential = 0.75
 speed = 50
 check = False
@@ -130,6 +138,8 @@ slider.pack(padx=20, pady=20)
 differnetial_slider = tk.Scale(window, from_=1, to=100, orient=tk.HORIZONTAL, length=300, command=update_differential)
 differnetial_slider.pack(padx=20, pady=20)
 
+plot_coord_button = tk.Button(text="Plot Point", command=plot_point, fg="purple")
+
 option_label.pack(side='top')
 button_frame.pack()
 slider.pack(padx=20,pady=20)
@@ -137,6 +147,7 @@ differnetial_slider.pack()
 label.pack(side='bottom',padx=20,pady=20)
 label1.pack(side='bottom',padx=20,pady=20)
 label2.pack(side='bottom',padx=20,pady=20)
+plot_coord_button.pack(side='bottom',padx=20,pady=20)
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)

@@ -118,7 +118,8 @@ class rel:
                     for k in range(len(self.tuple_list)):
                         if self.tuple_list[list[j][1]][3][k] == "1":
                             distance = self.calculate_two_given_points(self.tuple_list[list[j][1]][1], self.tuple_list[list[j][1]][2], self.tuple_list[k][1], self.tuple_list[k][2])
-                            new_sample = [list[j][0] + distance, k, list[j][2].append(k)]
+                            new_sample = [list[j][0] + distance, k, list[j][2] + [k]]
+                            list.append(new_sample)
 
         return list
 
@@ -132,7 +133,7 @@ class rel:
         else:
             list = self.calculate_distance(i)
             for j in range(len(list)):
-                if list[j][0] < small_distance and list[j][2][len(list) - 1] == i:
+                if list[j][0] < small_distance and list[j][2][-1] == i:
                     go_to = list[j][2]
                     small_distance = list[j][0]
 
