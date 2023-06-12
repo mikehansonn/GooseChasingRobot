@@ -110,7 +110,7 @@ class box:
         add_list = []
         for i in range(len(self.gps_list)):
             for j in range(len(self.gps_list[i])):
-                if j == 0:
+                if j == 0: 
                     add_list.append(self.gps_list[i][j])
                 else:
                     if j < len(self.gps_list[i]) - 1:
