@@ -3,6 +3,7 @@ import tkinter as tk
 import csv
 import Cytronclass85c
 import SparkfungpsClass41
+import sys
 from math import sin, cos, sqrt, atan2, radians
 
 class rel:
@@ -38,8 +39,14 @@ class rel:
                     self.tuple_list[i][0].place(x=250, y=525)
                 i = i + 1
 
+        master.bind('<KeyPress>', self.on_key_press)
         self.find_start_point()
         master.mainloop()
+
+
+    def on_key_press(self, event):
+        if event.char.lower() == 'q':
+            sys.exit()
 
 
     def calculate_distance_two_points(self, lat, long):

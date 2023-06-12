@@ -8,4 +8,4 @@ def find_slope(p1, p2):
     return (m, b)
 
 
-print(find_slope([2, 3], [1, 1]))
+print(find_slope([41.62541966,-73.78459166], [41.62555333,-73.784495]))

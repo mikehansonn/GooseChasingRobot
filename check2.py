@@ -1,12 +1,8 @@
-import TankInit
-import SparkfungpsClass41
 from math import sin, cos, sqrt, atan2, radians
 
 
 class box:
     def __init__(self, file_name):
-        self.move = TankInit.robot()
-        self.gps = SparkfungpsClass41.Gpsclass()
         self.gps_list = []
         self.equations = [] # make these as tuples but the slope is at 0 and the y intercept is at 1
         append_list = []
@@ -27,20 +23,16 @@ class box:
                     append_list.append(point)
 
         self.make_slope_equations()
+        print(self.equations)
         self.find_intercept()
         
 
     def find_intercept(self):
-        while True:
-            coords = self.gps.read_gps_broadcast() # lat in 0 long in 1
-            get_list = self.check_equations(coords)
-
-            for i in get_list:
-                if not i:
-                    print("--------not in area--------")
-                else:
-                    print("in area")
+        coords = [41.62538783,-73.78451466]
+        get_list = self.check_equations(coords)
+        print(get_list)
  
+
     def check_equations(self, current_coordinate):
         checks = [[1, current_coordinate[0]], [0, current_coordinate[1]]]
         check_bools = [False, False]
@@ -60,8 +52,8 @@ class box:
             found_indexes.append(append_list)
             append_list = []
 
-        check_bools[0] = self.check_higher_lower(1, found_indexes[0], checks[0][1])
-        check_bools[1] = self.check_higher_lower(0, found_indexes[1], checks[1][1])
+        check_bools[0] = self.check_higher_lower(0, found_indexes[0], checks[0][1])
+        check_bools[1] = self.check_higher_lower(1, found_indexes[1], checks[1][1])
 
         return check_bools
 
@@ -71,7 +63,9 @@ class box:
         low = 1000
         high = -1000
         
+        print(original_value)
         for i in range(len(intersections)):
+            print(intersections[i][up_one_right_zero])
             if intersections[i][up_one_right_zero] >= original_value and high == -1000:
                 high = intersections[i][up_one_right_zero]
             elif  intersections[i][up_one_right_zero] <= original_value and low == 1000:
@@ -103,10 +97,11 @@ class box:
         elif x_value <= p1[0] and x_value >= p2[0] and y_value <= p1[1] and y_value >= p2[1]:
             return (x_value, y_value)
         else:
-            return False
+            return False 
 
 
     def make_slope_equations(self):
+        print(self.gps_list)
         add_list = []
         for i in range(len(self.gps_list)):
             for j in range(len(self.gps_list[i])):
@@ -131,3 +126,5 @@ class box:
 
         return [m, b, (x1, y1), (x2, y2)]
 
+
+check = box("box_points.txt")
