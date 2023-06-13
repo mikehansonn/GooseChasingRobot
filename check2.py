@@ -28,7 +28,7 @@ class box:
         
 
     def find_intercept(self):
-        coords = [41.62538783,-73.78451466]
+        coords = [41.12536783,-73.78451466]
         get_list = self.check_equations(coords)
         print(get_list)
  
