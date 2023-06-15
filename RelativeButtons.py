@@ -119,6 +119,8 @@ class rel:
                 distance = self.calculate_two_given_points(self.tuple_list[current][1], self.tuple_list[current][2], self.tuple_list[j][1], self.tuple_list[j][2])
                 sample = [distance, j, [j]]
                 list.append(sample)
+                if j == i:
+                    return list
         for l in range(3):
             for j in range(len(list)):
                 if list[j][2][len(list[j][2]) - 1] != i:
@@ -127,6 +129,8 @@ class rel:
                             distance = self.calculate_two_given_points(self.tuple_list[list[j][1]][1], self.tuple_list[list[j][1]][2], self.tuple_list[k][1], self.tuple_list[k][2])
                             new_sample = [list[j][0] + distance, k, list[j][2] + [k]]
                             list.append(new_sample)
+                            if j == i:
+                                return list
 
         return list
 
