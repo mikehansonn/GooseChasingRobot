@@ -113,6 +113,7 @@ class rel:
     def calculate_distance(self, i):
         current = self.current_position
         list = [] # [[distance, at, [route]], ...]
+        check = False
 
         for j in range(len(self.tuple_list)):
             if self.tuple_list[current][3][j] == "1":
@@ -120,8 +121,8 @@ class rel:
                 sample = [distance, j, [j]]
                 list.append(sample)
                 if j == i:
-                    return list
-        for l in range(3):
+                    check == True
+        while not check:
             for j in range(len(list)):
                 if list[j][2][len(list[j][2]) - 1] != i:
                     for k in range(len(self.tuple_list)):
@@ -129,27 +130,28 @@ class rel:
                             distance = self.calculate_two_given_points(self.tuple_list[list[j][1]][1], self.tuple_list[list[j][1]][2], self.tuple_list[k][1], self.tuple_list[k][2])
                             new_sample = [list[j][0] + distance, k, list[j][2] + [k]]
                             list.append(new_sample)
-                            if j == i:
-                                return list
+                            if k == i:
+                                check == True
 
         return list
 
 
     def button_pressed(self, i):
-        small_distance = 100000000
-        go_to = []
+        if i != self.current_position:
+            small_distance = 100000000
+            go_to = []
 
-        if self.tuple_list[self.current_position][3][i] == "1":
-            self.move_new_point(self.tuple_list[i][1], self.tuple_list[i][2])
-        else:
-            list = self.calculate_distance(i)
-            for j in range(len(list)):
-                if list[j][0] < small_distance and list[j][2][-1] == i:
-                    go_to = list[j][2]
-                    small_distance = list[j][0]
+            if self.tuple_list[self.current_position][3][i] == "1":
+                self.move_new_point(self.tuple_list[i][1], self.tuple_list[i][2])
+            else:
+                list = self.calculate_distance(i)
+                for j in range(len(list)):
+                    if list[j][0] < small_distance and list[j][2][-1] == i:
+                        go_to = list[j][2]
+                        small_distance = list[j][0]
 
-            for q in range(len(go_to)):
-                self.move_new_point(self.tuple_list[go_to[q]][1], self.tuple_list[go_to[q]][2])
+                for q in range(len(go_to)):
+                    self.move_new_point(self.tuple_list[go_to[q]][1], self.tuple_list[go_to[q]][2])
 
 
 def __main__():
