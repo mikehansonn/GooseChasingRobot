@@ -28,7 +28,7 @@ class box:
         
 
     def find_intercept(self):
-        coords = [41.12536783,-73.78451466]
+        coords = [41.62536983,-73.78451466]
         get_list = self.check_equations(coords)
         print(get_list)
  
@@ -52,8 +52,8 @@ class box:
             found_indexes.append(append_list)
             append_list = []
 
-        check_bools[0] = self.check_higher_lower(0, found_indexes[0], checks[0][1])
-        check_bools[1] = self.check_higher_lower(1, found_indexes[1], checks[1][1])
+        check_bools[0] = self.check_higher_lower(0, found_indexes[1], checks[0][1])
+        check_bools[1] = self.check_higher_lower(1, found_indexes[0], checks[1][1])
 
         return check_bools
 
@@ -63,15 +63,19 @@ class box:
         low = 1000
         high = -1000
         
-        print(original_value)
         for i in range(len(intersections)):
+            print()
             print(intersections[i][up_one_right_zero])
+            print(original_value)
             if intersections[i][up_one_right_zero] >= original_value and high == -1000:
                 high = intersections[i][up_one_right_zero]
             elif  intersections[i][up_one_right_zero] <= original_value and low == 1000:
                 low =  intersections[i][up_one_right_zero]
 
         if low != 1000 and high != -1000:
+            print("low: ", low)
+            print("original: ", original_value)
+            print("high: ", high)
             return True
         else:
             return False
@@ -101,7 +105,6 @@ class box:
 
 
     def make_slope_equations(self):
-        print(self.gps_list)
         add_list = []
         for i in range(len(self.gps_list)):
             for j in range(len(self.gps_list[i])):

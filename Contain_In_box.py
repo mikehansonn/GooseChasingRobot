@@ -57,8 +57,8 @@ class box:
             found_indexes.append(append_list)
             append_list = []
 
-        check_bools[0] = self.check_higher_lower(0, found_indexes[0], checks[0][1])
-        check_bools[1] = self.check_higher_lower(1, found_indexes[1], checks[1][1])
+        check_bools[0] = self.check_higher_lower(0, found_indexes[1], checks[0][1])
+        check_bools[1] = self.check_higher_lower(1, found_indexes[0], checks[1][1])
 
         return check_bools
 
