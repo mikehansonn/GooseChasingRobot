@@ -106,7 +106,7 @@ class g:
                 sample = [distance, j, [j]]
                 list.append(sample)
                 if j == i:
-                    check == True
+                    check = True
         while not check:
             for j in range(len(list)):
                 if list[j][2][len(list[j][2]) - 1] != i:
