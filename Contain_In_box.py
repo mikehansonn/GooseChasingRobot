@@ -35,8 +35,7 @@ class box:
             coords = self.gps.read_gps_broadcast() # lat in 0 long in 1
             coords = (coords[0], -coords[1])
             get_list = self.check_equations(coords)
-
-            print(get_list)
+ 
  
     def check_equations(self, current_coordinate):
         checks = [[1, current_coordinate[0]], [0, current_coordinate[1]]]
