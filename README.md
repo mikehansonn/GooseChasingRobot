@@ -1,4 +1,4 @@
 # RobotThings
 
-
-This is a home for all of the robot things
+Holds a lot of the traversal programs along with some other
+original filler code
